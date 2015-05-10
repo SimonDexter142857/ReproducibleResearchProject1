@@ -2,8 +2,8 @@
 title: "Analysis of Daily Activity Data"
 output:
   html_document:
+    fig_height: 8
     theme: united
-    toc: no
   pdf_document:
     highlight: zenburn
     toc: no
@@ -256,25 +256,35 @@ s4 = data.frame(s4);
 s4.1 = s4[s4$WeekDayType == 'Mon-Fri', ];
 s4.2 = s4[s4$WeekDayType == 'Sat-Sun', ];
 
-plot(s4$StepsAvg ~ s4$interval, type = 'n', 
-     main='Steps (Avg.) per Interval Mon-Fri vs. Sat-Sun',
+par(mfrow = c(3, 1));
+
+plot(s4.1$StepsAvg ~ s4.1$interval,  
+     main = 'Steps (Avg.) per Interval (Mon-Fri)',
      xlab = 'Interval',
      ylab = 'Steps (avg.) per interval',
-     sub = 'Missing values imputed');
+     sub = 'Missing values imputed',
+     type = 'l', 
+     lty = 1, 
+     lwd = 2, 
+     col = 'darkslategray4',
+     ylim = c(0, 210)
+);
 
-lines(s4.1$StepsAvg ~ s4.1$interval, 
-      type = 'l', lty = 1, lwd = 2, col = 'darkslategray4');
+abline(h=mean(s4.1$StepsAvg) ,lty=3,lwd=1,col='gray');
 
-lines(s4.2$StepsAvg ~ s4.2$interval, 
-      type = 'l', lty = 1, lwd = 2, col = 'darkseagreen3');
+plot(s4.2$StepsAvg ~ s4.2$interval, 
+     main = 'Steps (Avg.) per Interval (Sat-Sun)',
+     xlab = 'Interval',
+     ylab = 'Steps (avg.) per interval',
+     sub = 'Missing values imputed',
+     type = 'l', 
+     lty = 1, 
+     lwd = 2, 
+     col = 'darkseagreen3',
+     ylim = c(0, 210)
+);
 
-legend('topright', legend = c('Mon-Fri', 'Sat-Sun', 'Delta'), 
-                                bty='n',
-                                lwd = c(2, 2, 0.5), lty =  c(1, 1, 3) ,
-                                     col = c('darkslategray4',
-                                             'darkseagreen3',
-                                             'red') );
-
+abline(h=mean(s4.2$StepsAvg) ,lty=3,lwd=1,col='gray');
 
 s4.1 = tbl_df(s4.1);
 s4.2 = tbl_df(s4.2);
@@ -283,10 +293,23 @@ s5 = inner_join (s4.1, s4.2, by='interval');
 
 s5$Delta = s5$StepsAvg.x - s5$StepsAvg.y;
 
-s5$Delta = s5$Delta / 5 + 100;
 
-lines(s5$Delta ~ s5$interval, 
-      type = 'l', lty = 3, lwd = 0.5, col = 'red');
+
+
+
+plot(s5$Delta ~ s5$interval, 
+     main = 'Steps (Avg.) per Interval -- Delta between Mon-Fri and Sat-Sun',
+     xlab = 'Interval',
+     ylab = 'Steps (avg.) per interval',
+     sub = 'Missing values imputed',
+     type = 'l', 
+     lty = 3, 
+     lwd = 0.5, 
+     col = 'red'
+);
+
+abline(h=0,lty=3,lwd=1,col='gray');
+
 ```
 
 
